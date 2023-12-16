@@ -1,8 +1,11 @@
+
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:shop/presentation/shared/shared.dart';
+import 'package:shop/presentation/providers/providers.dart';
 
 class LoginScreen extends StatelessWidget {
 
@@ -50,31 +53,38 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class _LoginForm extends StatelessWidget {
+class _LoginForm extends ConsumerWidget {
   const _LoginForm();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
 
+    final loginForm = ref.watch(loginFormProvider); // State
     final textStyles = Theme.of(context).textTheme;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 50),
       child: Column(
         children: [
+
           const SizedBox( height: 50 ),
           Text('Login', style: textStyles.titleLarge ),
           const SizedBox( height: 90 ),
 
-          const CustomTextFormField(
+          CustomTextFormField(
             label: 'Email',
             keyboardType: TextInputType.emailAddress,
+            onChanged: ref.read(loginFormProvider.notifier).onEmailChange,
+            errorMessage: loginForm.isFormPosted ? loginForm.email.errorMessage : null,
           ),
+
           const SizedBox( height: 30 ),
 
-          const CustomTextFormField(
+          CustomTextFormField(
             label: 'Password',
             obscureText: true,
+            onChanged: ref.read(loginFormProvider.notifier).onPasswordChange,
+            errorMessage:  loginForm.isFormPosted ? loginForm.password.errorMessage : null,
           ),
     
           const SizedBox( height: 30 ),
@@ -85,9 +95,7 @@ class _LoginForm extends StatelessWidget {
             child: CustomFilledButton(
               text: 'Login',
               buttonColor: Colors.black,
-              onPressed: (){
-
-              },
+              onPressed: ref.read(loginFormProvider.notifier).onFormSubmit,
             )
           ),
 
