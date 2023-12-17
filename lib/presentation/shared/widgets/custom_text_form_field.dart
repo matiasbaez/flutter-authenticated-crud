@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
 class CustomTextFormField extends StatelessWidget {
@@ -9,17 +10,19 @@ class CustomTextFormField extends StatelessWidget {
   final bool obscureText;
   final TextInputType? keyboardType;
   final Function(String)? onChanged;
+  final Function(String)? onFieldSubmitted;
   final String? Function(String?)? validator;
 
   const CustomTextFormField({
-    super.key, 
-    this.label, 
-    this.hint, 
-    this.errorMessage, 
+    super.key,
+    this.label,
+    this.hint,
+    this.errorMessage,
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
-    this.onChanged, 
-    this.validator, 
+    this.onChanged,
+    this.onFieldSubmitted,
+    this.validator,
   });
 
   @override
@@ -52,6 +55,7 @@ class CustomTextFormField extends StatelessWidget {
         validator: validator,
         obscureText: obscureText,
         keyboardType: keyboardType,
+        onFieldSubmitted: onFieldSubmitted,
         style: const TextStyle( fontSize: 20, color: Colors.black54 ),
         decoration: InputDecoration(
           floatingLabelStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),

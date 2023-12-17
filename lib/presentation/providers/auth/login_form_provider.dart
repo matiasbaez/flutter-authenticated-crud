@@ -3,7 +3,7 @@ import 'package:formz/formz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:shop/infraestructure/inputs/inputs.dart';
-import 'package:shop/presentation/providers/auth_provider.dart';
+import 'package:shop/presentation/providers/providers.dart';
 
 // Provider
 final loginFormProvider = StateNotifierProvider.autoDispose<LoginFormNotifier, LoginFormState>((ref) {
