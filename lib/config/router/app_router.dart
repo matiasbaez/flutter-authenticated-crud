@@ -4,8 +4,13 @@ import 'package:go_router/go_router.dart';
 import 'package:shop/presentation/screens/screens.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/auth/login',
+  initialLocation: '/splash',
   routes: [
+
+    GoRoute(
+      path: '/splash',
+      builder: (context, state) => const CheckAuthStatusScreen(),
+    ),
 
     // Auth Routes
     GoRoute(

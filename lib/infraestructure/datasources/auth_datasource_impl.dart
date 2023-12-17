@@ -14,9 +14,30 @@ class AuthDataSourceImpl extends AuthDataSource {
   );
 
   @override
-  Future<User> checkAuthStatus(String token) {
-    // TODO: implement checkAuthStatus
-    throw UnimplementedError();
+  Future<User> checkAuthStatus(String token) async {
+    try {
+
+      final response = await _dio.get(
+        '/auth/check-status',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token'
+          }
+        )
+      );
+
+      return UserMapper.userJsonToEntity(response.data);
+
+    } on DioException catch(err) {
+
+      if (err.response?.statusCode == 401) throw WrongCredentials();
+      if (err.type == DioExceptionType.connectionTimeout) throw ConnectionTimeout();
+
+      throw CustomError(message: 'Something wrong happend', errorCode: err.response?.statusCode ?? 500);
+
+    } catch(err) {
+      throw Exception();
+    }
   }
 
   @override

@@ -38,6 +38,7 @@ dependencies:
   go_router: ^12.1.3
   google_fonts: ^6.1.0
   riverpod: ^2.4.9
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -59,7 +60,6 @@ flutter:
     - assets/images/
     - assets/google_fonts/montserrat_alternates/
     - .env
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

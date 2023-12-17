@@ -5,19 +5,33 @@ import 'package:shop/domain/domain.dart';
 import 'package:shop/infraestructure/infraestructure.dart';
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
+
   final authRepository = AuthRepositoryImpl();
-  return AuthNotifier(authRepository: authRepository);
+  final sharedPreferences = KeyValueStorageServiceImpl();
+
+  return AuthNotifier(
+    authRepository: authRepository,
+    keyValueStorageService: sharedPreferences
+  );
+
 });
 
 class AuthNotifier extends StateNotifier<AuthState> {
 
   final AuthRepositoryImpl authRepository;
+  final KeyValueStorageServiceImpl keyValueStorageService;
 
   AuthNotifier({
-    required this.authRepository
-  }): super(AuthState());
+    required this.authRepository,
+    required this.keyValueStorageService
+  }) : super(AuthState()) {
+    checkAuthStatus();
+  }
 
-  _setLoggedUser( User user ) {
+  _setLoggedUser( User user ) async {
+
+    await keyValueStorageService.setKeyValue('token', user.token);
+  
     state = state.copyWith(
       user: user,
       authStatus: AuthStatus.authenticated,
@@ -43,9 +57,23 @@ class AuthNotifier extends StateNotifier<AuthState> {
     authRepository.register(fullname, email, password);
   }
 
-  void checkAuthStatus( String token ) async {}
+  void checkAuthStatus() async {
+    final token = await keyValueStorageService.getValue<String>('token');
+
+    if (token == null) return logout();
+
+    try {
+      final user = await authRepository.checkAuthStatus(token);
+      _setLoggedUser(user);
+    } catch (err) {
+      logout();
+    }
+  }
 
   Future<void> logout( [String? errorMessage = ''] ) async {
+
+    await keyValueStorageService.removeKey('token');
+
     state = state.copyWith(
       user: null,
       authStatus: AuthStatus.notAuthenticated,
