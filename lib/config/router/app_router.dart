@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shop/config/router/app_router_notifier.dart';
-import 'package:shop/presentation/providers/providers.dart';
 
 import 'package:shop/presentation/screens/screens.dart';
-
-
+import 'package:shop/presentation/providers/providers.dart';
+import 'package:shop/config/router/app_router_notifier.dart';
 
 final goRouterProvider = Provider((ref) {
 
@@ -40,10 +38,16 @@ final goRouterProvider = Provider((ref) {
         ]
       ),
 
-      ///* Product Routes
+      // Product Routes
       GoRoute(
         path: '/',
         builder: (context, state) => const ProductsScreen(),
+        routes: [
+          GoRoute(
+            path: 'product/:id',
+            builder: (context, state) => ProductDetailScreen(productId: state.pathParameters['id'] ?? 'no-id')
+          )
+        ]
       ),
     ],
 

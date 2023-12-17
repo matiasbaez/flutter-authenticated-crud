@@ -34,23 +34,18 @@ class ProductsDataSourceImpl extends ProductsDataSource {
 
   @override
   Future<List<Product>> getProductsByPage({int limit = 10, int offset = 0}) async {
-    try {
 
-      final response = await dio.get('/products', queryParameters: {
-        'limit': limit,
-        'offset': offset
-      });
+    final response = await dio.get('/products', queryParameters: {
+      'limit': limit,
+      'offset': offset
+    });
 
-      final List<Product> products = [];
-      for (final product in response.data ?? []) {
-        products.add(ProductMapper.productJsonToEntity(product));
-      }
-
-      return products;
-
-    } catch (err) {
-      return [];
+    final List<Product> products = [];
+    for (final product in response.data ?? []) {
+      products.add(ProductMapper.productJsonToEntity(product));
     }
+
+    return products;
   }
 
   @override
